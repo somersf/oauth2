@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"golang.org/x/net/context/ctxhttp"
+	"golang.org/x/oauth2/internal"
 )
 
 const (
@@ -76,6 +77,10 @@ func parseError(err error) string {
 		eResp := make(map[string]string)
 		_ = json.Unmarshal(e.Body, &eResp)
 		return eResp["error"]
+	}
+	e2, ok := err.(*internal.TokenError)
+	if ok {
+		return e2.Err
 	}
 	return ""
 }

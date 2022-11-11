@@ -275,7 +275,7 @@ func (c *Config) Poll(ctx context.Context, da *DeviceAuth, opts ...AuthCodeOptio
 		case errAccessDenied, errExpiredToken:
 			return tok, errors.New("oauth2: " + errTyp)
 		case errSlowDown:
-			interval += 1
+			interval += 5
 			fallthrough
 		case errAuthorizationPending:
 		}
