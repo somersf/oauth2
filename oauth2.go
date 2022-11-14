@@ -272,12 +272,14 @@ func (c *Config) Poll(ctx context.Context, da *DeviceAuth, opts ...AuthCodeOptio
 
 		errTyp := parseError(err)
 		switch errTyp {
-		case errAccessDenied, errExpiredToken:
-			return tok, errors.New("oauth2: " + errTyp)
 		case errSlowDown:
 			interval += 5
-			fallthrough
 		case errAuthorizationPending:
+			// Do nothing.
+		case errAccessDenied, errExpiredToken:
+			fallthrough
+		default:
+			return tok, err
 		}
 	}
 }
@@ -329,6 +331,7 @@ func (tf *tokenRefresher) Token() (*Token, error) {
 		"grant_type":    {"refresh_token"},
 		"refresh_token": {tf.refreshToken},
 	})
+
 	if err != nil {
 		return nil, err
 	}
