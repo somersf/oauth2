@@ -494,7 +494,7 @@ func TestTokenRetrieveError(t *testing.T) {
 	if err == nil {
 		t.Fatalf("got no error, expected one")
 	}
-	_, ok := err.(*RetrieveError)
+	re, ok := err.(*RetrieveError)
 	if !ok {
 		t.Fatalf("got %T error, expected *RetrieveError; error was: %v", err, err)
 	}
@@ -502,6 +502,10 @@ func TestTokenRetrieveError(t *testing.T) {
 	expected := fmt.Sprintf("oauth2: cannot fetch token: %v\nResponse: %s", "400 Bad Request", `{"error": "invalid_grant"}`)
 	if errStr := err.Error(); errStr != expected {
 		t.Fatalf("got %#v, expected %#v", errStr, expected)
+	}
+	expected = "invalid_grant"
+	if re.ErrorCode != expected {
+		t.Fatalf("got %#v, expected %#v", re.ErrorCode, expected)
 	}
 }
 
@@ -520,13 +524,17 @@ func TestTokenRetrieveError200(t *testing.T) {
 	if err == nil {
 		t.Fatalf("got no error, expected one")
 	}
-	_, ok := err.(*RetrieveError)
+	re, ok := err.(*RetrieveError)
 	if !ok {
 		t.Fatalf("got %T error, expected *RetrieveError; error was: %v", err, err)
 	}
 	expected := fmt.Sprintf("oauth2: cannot fetch token: %v\nResponse: %s", "200 OK", `{"error": "invalid_grant"}`)
 	if errStr := err.Error(); errStr != expected {
 		t.Fatalf("got %#v, expected %#v", errStr, expected)
+	}
+	expected = "invalid_grant"
+	if re.ErrorCode != expected {
+		t.Fatalf("got %#v, expected %#v", re.ErrorCode, expected)
 	}
 }
 
