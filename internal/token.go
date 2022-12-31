@@ -266,7 +266,7 @@ func doTokenRoundTrip(ctx context.Context, req *http.Request) (*Token, error) {
 		}
 		retrieveError.ErrorCode = vals.Get("error")
 		retrieveError.ErrorDescription = vals.Get("error_description")
-		retrieveError.ErrorCode = vals.Get("error")
+		retrieveError.ErrorUri = vals.Get("error_uri")
 		token = &Token{
 			AccessToken:  vals.Get("access_token"),
 			TokenType:    vals.Get("token_type"),
