@@ -270,7 +270,12 @@ func (c *Config) Poll(ctx context.Context, da *DeviceAuth, opts ...AuthCodeOptio
 			return tok, nil
 		}
 
-		e, _ := err.(*RetrieveError)
+		// fsomers - local bugfix.
+		// See https://go-review.googlesource.com/c/oauth2/+/450155/comment/a17553ee_612942c0/
+		e, ok := err.(*RetrieveError)
+		if !ok {
+			return nil, err
+		}
 		switch e.ErrorCode {
 		case errSlowDown:
 			interval += 5
